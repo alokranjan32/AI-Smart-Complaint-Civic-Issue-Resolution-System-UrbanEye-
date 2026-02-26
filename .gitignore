@@ -1,0 +1,36 @@
+# Environment files
+.env
+.env.local
+.env.development
+
+# Node modules
+node_modules/
+
+# Logs
+logs/
+*.log
+
+# Build files
+dist/
+build/
+
+# React Native
+android/.gradle
+android/app/build
+ios/build
+
+# Python
+__pycache__/
+*.pyc
+
+# Mac
+.DS_Store
+
+# VS Code
+.vscode/
+
+# Database
+*.sqlite
+
+# Secrets
+secrets.json
