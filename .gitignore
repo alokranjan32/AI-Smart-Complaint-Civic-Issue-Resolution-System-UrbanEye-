@@ -1,36 +1,161 @@
-# Environment files
+ # -----------------------------
+
+# OS files
+
+# -----------------------------
+
+.DS_Store
+Thumbs.db
+
+# -----------------------------
+
+# Environment variables
+
+# -----------------------------
+
 .env
 .env.local
-.env.development
+.env.development.local
+.env.test.local
+.env.production.local
 
-# Node modules
+# -----------------------------
+
+# Node.js
+
+# -----------------------------
+
 node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# -----------------------------
+
+# Next.js
+
+# -----------------------------
+
+.next/
+out/
+.next-cache/
+
+# -----------------------------
+
+# React / React Native
+
+# -----------------------------
+
+.expo/
+.expo-shared/
+dist/
+build/
+web-build/
+
+# React Native
+
+android/.gradle/
+android/app/build/
+android/build/
+ios/Pods/
+ios/build/
+
+# -----------------------------
+
+# Python
+
+# -----------------------------
+
+**pycache**/
+*.py[cod]
+*$py.class
+
+# Virtual environments
+
+.venv/
+venv/
+env/
+ENV/
+
+# Python packaging
+
+build/
+dist/
+.eggs/
+*.egg-info/
+
+# -----------------------------
+
+# FastAPI / AI services
+
+# -----------------------------
+
+*.db
+*.sqlite3
+*.log
+
+# -----------------------------
+
+# Machine Learning / AI
+
+# -----------------------------
+
+*.pt
+*.pth
+*.h5
+*.ckpt
+*.model
+*.bin
+
+# Vector DB / embeddings
+
+faiss_index/
+vector_store/
+
+# -----------------------------
+
+# IDE / Editors
+
+# -----------------------------
+
+.vscode/
+.idea/
+
+# -----------------------------
 
 # Logs
+
+# -----------------------------
+
 logs/
 *.log
 
-# Build files
-dist/
-build/
+# -----------------------------
 
-# React Native
-android/.gradle
-android/app/build
-ios/build
+# Temporary files
 
-# Python
-__pycache__/
-*.pyc
+# -----------------------------
 
-# Mac
-.DS_Store
+tmp/
+temp/
 
-# VS Code
-.vscode/
+# -----------------------------
 
-# Database
-*.sqlite
+# Coverage reports
 
-# Secrets
-secrets.json
+# -----------------------------
+
+coverage/
+.coverage
+htmlcov/
+
+# -----------------------------
+
+# Misc
+
+# -----------------------------
+
+*.swp
+*.swo
+*~
