@@ -23,17 +23,25 @@ Departments:
 - Sanitation Department
 - Water Department
 - Electricity Department
+ 
+Priority values:
+low
+medium
+high
+ 
+Return ONLY valid JSON in this format:
 
-Return format:
-
-category:
-priority:
-department:
+{{
+ "category": "",
+ "priority": "",
+ "department": ""
+}}
 
 Priority values:
 low
 medium
 high
+
 """
 )
 
