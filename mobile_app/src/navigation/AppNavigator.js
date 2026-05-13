@@ -1,5 +1,6 @@
 import React, { useContext } from "react";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import { ActivityIndicator, SafeAreaView, StyleSheet, Text, View } from "react-native";
 
 import HomeScreen from "../screens/HomeScreen";
 import ReportScreen from "../screens/ReportScreen";
@@ -16,7 +17,19 @@ import { AuthContext } from "../context/AuthContext";
 const Stack = createNativeStackNavigator();
 
 export default function AppNavigator() {
-  const { user } = useContext(AuthContext);
+  const { isHydrated, user } = useContext(AuthContext);
+
+  if (!isHydrated) {
+    return (
+      <SafeAreaView style={styles.safeArea}>
+        <View style={styles.loadingCard}>
+          <ActivityIndicator color="#ef8354" size="large" />
+          <Text style={styles.loadingTitle}>Loading your civic workspace</Text>
+          <Text style={styles.loadingBody}>Restoring profile, complaint tracker, and saved X account.</Text>
+        </View>
+      </SafeAreaView>
+    );
+  }
 
   return (
     <Stack.Navigator
@@ -50,3 +63,31 @@ export default function AppNavigator() {
     </Stack.Navigator>
   );
 }
+
+const styles = StyleSheet.create({
+  safeArea: {
+    flex: 1,
+    backgroundColor: "#f4efe6",
+    justifyContent: "center",
+    padding: 24,
+  },
+  loadingCard: {
+    backgroundColor: "#14213d",
+    borderRadius: 28,
+    padding: 28,
+    alignItems: "center",
+  },
+  loadingTitle: {
+    marginTop: 18,
+    color: "#fff",
+    fontSize: 22,
+    fontWeight: "800",
+    textAlign: "center",
+  },
+  loadingBody: {
+    marginTop: 10,
+    color: "#dbe2ef",
+    lineHeight: 22,
+    textAlign: "center",
+  },
+});

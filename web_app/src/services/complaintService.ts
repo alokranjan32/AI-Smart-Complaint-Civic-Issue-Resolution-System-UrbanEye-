@@ -10,6 +10,10 @@ export type ComplaintPayload = {
   image?: string;
 };
 
+function buildFallbackSocialPost(payload: ComplaintPayload) {
+  return `Civic update: ${payload.title} at ${payload.location}. ${payload.description} #CityUpdate #CivicAction`;
+}
+
 export async function getComplaints() {
   return apiRequest<Complaint[]>("/complaints", {
     fallbackData: demoComplaints,
@@ -30,6 +34,7 @@ export async function createComplaint(payload: ComplaintPayload) {
       status: "PENDING",
       department: "Civic Response Cell",
       createdAt: new Date().toISOString(),
+      socialPost: buildFallbackSocialPost(payload),
     },
   });
 }

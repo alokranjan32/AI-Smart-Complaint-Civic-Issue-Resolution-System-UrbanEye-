@@ -1,8 +1,9 @@
 import { Router } from "express";
-import { getCurrentUser } from "../controllers/userController.js";
+import { getCurrentUser, updateCurrentUser } from "../controllers/userController.js";
 
 const router = Router();
 
 router.get("/me", getCurrentUser);
+router.patch("/:id", updateCurrentUser);
 
 export default router;

@@ -5,6 +5,12 @@ type Props = {
 };
 
 export default function ComplaintCard({ complaint }: Props) {
+  const latestHistoryEntry = complaint.history?.length
+    ? [...complaint.history].sort(
+        (left, right) => new Date(right.createdAt).getTime() - new Date(left.createdAt).getTime(),
+      )[0]
+    : null;
+
   return (
     <article className="glass-card rounded-[28px] p-5">
       <div className="mb-4 flex items-start justify-between gap-4">
@@ -32,6 +38,23 @@ export default function ComplaintCard({ complaint }: Props) {
         <p className="mt-4 text-sm leading-6 text-[var(--ink-muted)]">
           Suggested action: {complaint.suggestedAction}
         </p>
+      ) : null}
+      {complaint.assignedTo ? (
+        <p className="mt-3 text-sm leading-6 text-[var(--ink-muted)]">
+          Assigned to: {complaint.assignedTo}
+        </p>
+      ) : null}
+      {latestHistoryEntry ? (
+        <div className="mt-4 rounded-[22px] bg-white/65 p-4 text-sm leading-6 text-[var(--ink-muted)]">
+          <p className="font-semibold text-[var(--foreground)]">Latest update</p>
+          <p className="mt-2">{latestHistoryEntry.message}</p>
+          <p className="mt-2 text-xs">
+            {new Date(latestHistoryEntry.createdAt).toLocaleString("en-IN", {
+              dateStyle: "medium",
+              timeStyle: "short",
+            })}
+          </p>
+        </div>
       ) : null}
     </article>
   );

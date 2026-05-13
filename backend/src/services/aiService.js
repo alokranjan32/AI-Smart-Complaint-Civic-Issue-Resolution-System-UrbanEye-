@@ -1,7 +1,45 @@
 const AI_SERVICE_URL = process.env.AI_SERVICE_URL?.replace(/\/$/, "") || "http://localhost:8000";
 
+const SOCIAL_HASHTAGS = {
+  Sanitation: ["#CleanStreets", "#CivicAction"],
+  Electricity: ["#StreetlightFix", "#CivicAction"],
+  Water: ["#WaterAlert", "#CivicAction"],
+  Roads: ["#RoadSafety", "#CivicAction"],
+  General: ["#CityUpdate", "#CivicAction"],
+};
+
 function keywordMatch(text, keywords) {
   return keywords.some((keyword) => text.includes(keyword));
+}
+
+function compactText(text = "") {
+  return text.replace(/\s+/g, " ").trim();
+}
+
+function trimToLength(text, limit) {
+  const compact = compactText(text);
+  if (compact.length <= limit) {
+    return compact;
+  }
+
+  const trimmed = compact.slice(0, Math.max(limit - 1, 0)).replace(/[ ,.;:-]+$/, "");
+  return `${trimmed}…`;
+}
+
+function buildSocialPost({ title = "", description = "", location = "", category = "General", priority = "MEDIUM", department = "Civic Response Cell" }) {
+  const prefixByPriority = {
+    CRITICAL: "Urgent civic alert:",
+    HIGH: "High-priority civic alert:",
+    MEDIUM: "Civic update:",
+    LOW: "Civic update:",
+  };
+  const hashtags = (SOCIAL_HASHTAGS[category] || SOCIAL_HASHTAGS.General).join(" ");
+  const issueSummary = trimToLength(description || title, 85);
+
+  return trimToLength(
+    `${prefixByPriority[priority] || prefixByPriority.MEDIUM} ${title} at ${location}. ${issueSummary} Assigned to ${department}. ${hashtags}`,
+    280,
+  );
 }
 
 function localAnalysis({ title = "", description = "", location = "" }) {
@@ -39,7 +77,14 @@ function localAnalysis({ title = "", description = "", location = "" }) {
     sentiment: priority === "CRITICAL" ? "urgent" : "concerned",
     confidence: 0.72,
     suggestedAction: `Route this complaint to ${department} for field validation.`,
-    socialPost: "",
+    socialPost: buildSocialPost({
+      title,
+      description,
+      location,
+      category,
+      priority,
+      department,
+    }),
   };
 }
 

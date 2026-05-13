@@ -23,7 +23,26 @@ export type Complaint = {
   latitude?: number;
   longitude?: number;
   upvotes?: number;
+  assignedTo?: string;
+  adminNote?: string;
+  updatedAt?: string;
+  history?: ComplaintHistoryEntry[];
   user?: User | null;
+};
+
+export type ComplaintHistoryEntry = {
+  id: string;
+  complaintId: string;
+  type: string;
+  actorName: string;
+  actorRole: string;
+  message: string;
+  fromStatus?: string | null;
+  toStatus?: string | null;
+  department?: string;
+  assignedTo?: string;
+  note?: string;
+  createdAt: string;
 };
 
 export type AdminOverview = {
@@ -58,6 +77,9 @@ export const demoComplaints: Complaint[] = [
     upvotes: 19,
     latitude: 25.6175,
     longitude: 85.1452,
+    assignedTo: "Ward Sanitation Officer",
+    adminNote: "Crew dispatched for same-day pickup and route inspection.",
+    updatedAt: "2026-03-22T13:15:00.000Z",
     user: {
       name: "Aarav Singh",
       email: "citizen@urbaneye.dev",
@@ -80,6 +102,9 @@ export const demoComplaints: Complaint[] = [
     upvotes: 11,
     latitude: 25.6128,
     longitude: 85.1178,
+    assignedTo: "Electrical Maintenance Desk",
+    adminNote: "Awaiting field technician assignment for night inspection.",
+    updatedAt: "2026-03-21T18:10:00.000Z",
     user: {
       name: "Aarav Singh",
       email: "citizen@urbaneye.dev",
@@ -102,6 +127,7 @@ export const demoComplaints: Complaint[] = [
     upvotes: 23,
     latitude: 25.5944,
     longitude: 85.1612,
+    updatedAt: "2026-03-23T06:45:00.000Z",
     user: {
       name: "Aarav Singh",
       email: "citizen@urbaneye.dev",
@@ -125,6 +151,9 @@ export const demoComplaints: Complaint[] = [
     upvotes: 31,
     latitude: 25.6096,
     longitude: 85.1081,
+    assignedTo: "Road Repair Cell",
+    adminNote: "Temporary resurfacing completed and site marked for follow-up audit.",
+    updatedAt: "2026-03-19T17:35:00.000Z",
     user: {
       name: "Aarav Singh",
       email: "citizen@urbaneye.dev",

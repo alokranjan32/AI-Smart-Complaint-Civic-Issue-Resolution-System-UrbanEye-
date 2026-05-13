@@ -20,6 +20,11 @@ function buildUserPayload({ name, email, passwordHash, role = "CITIZEN" }) {
     password: passwordHash,
     role,
     createdAt: new Date().toISOString(),
+    xHandle: "",
+    alertsEnabled: false,
+    alertLatitude: null,
+    alertLongitude: null,
+    alertRadiusKm: 3,
   };
 }
 

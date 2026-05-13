@@ -7,6 +7,8 @@ import complaintRoutes from "./routes/complaintRoutes.js";
 import adminRoutes from "./routes/adminRoutes.js";
 import mapRoutes from "./routes/mapRoutes.js";
 import userRoutes from "./routes/userRoutes.js";
+import alertRoutes from "./routes/alertRoutes.js";
+import { isRedisReady } from "./config/redisConfig.js";
 
 const app = express();
 
@@ -27,11 +29,19 @@ app.get("/", (req, res) => {
   });
 });
 
+app.get("/health", (req, res) => {
+  res.json({
+    ok: true,
+    redis: isRedisReady() ? "connected" : "unavailable",
+  });
+});
+
 app.use("/api/auth", authRoutes);
 app.use("/api/complaints", complaintRoutes);
 app.use("/api/admin", adminRoutes);
 app.use("/api/map", mapRoutes);
 app.use("/api/users", userRoutes);
+app.use("/api/alerts", alertRoutes);
 
 app.use((err, req, res, next) => {
   console.error(err);

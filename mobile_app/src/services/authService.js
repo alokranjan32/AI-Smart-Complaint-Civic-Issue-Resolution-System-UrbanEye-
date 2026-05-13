@@ -7,6 +7,11 @@ function buildDemoUser(data) {
     email: data.email,
     role: "CITIZEN",
     createdAt: new Date().toISOString(),
+    xHandle: "",
+    alertsEnabled: false,
+    alertLatitude: null,
+    alertLongitude: null,
+    alertRadiusKm: 3,
   };
 }
 

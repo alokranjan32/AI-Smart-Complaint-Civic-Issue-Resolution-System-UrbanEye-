@@ -1,0 +1,37 @@
+{
+  "expo": {
+    "name": "UrbanEye",
+    "slug": "urbaneye",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "scheme": "urbaneye",
+    "userInterfaceStyle": "light",
+    "ios": {
+      "bundleIdentifier": "com.urbaneye.app",
+      "infoPlist": {
+        "NSCameraUsageDescription": "UrbanEye uses the camera to capture civic issue photos.",
+        "NSLocationWhenInUseUsageDescription": "UrbanEye uses your location to map complaints and nearby hazard alerts.",
+        "NSPhotoLibraryUsageDescription": "UrbanEye lets you attach photos as complaint evidence."
+      }
+    },
+    "android": {
+      "package": "com.urbaneye.app",
+      "permissions": [
+        "CAMERA",
+        "ACCESS_COARSE_LOCATION",
+        "ACCESS_FINE_LOCATION",
+        "READ_MEDIA_IMAGES"
+      ]
+    },
+    "plugins": [
+      "expo-location",
+      [
+        "expo-image-picker",
+        {
+          "photosPermission": "Allow UrbanEye to attach photos as complaint evidence.",
+          "cameraPermission": "Allow UrbanEye to scan and capture civic hazards."
+        }
+      ]
+    ]
+  }
+}

@@ -1,6 +1,8 @@
 from fastapi import FastAPI
 from pydantic import BaseModel, Field
 
+from agents.social_agent import generate_social_post
+
 
 class ComplaintPayload(BaseModel):
     title: str = Field(..., min_length=3)
@@ -51,7 +53,14 @@ def analyze_locally(payload: ComplaintPayload) -> AnalysisResult:
         sentiment = "urgent"
 
     action = f"Route this complaint to {department} and request field validation."
-    social = f"{category} issue reported at {payload.location}. Team notified for action."
+    social = generate_social_post(
+        title=payload.title,
+        description=payload.description,
+        location=payload.location,
+        category=category,
+        priority=priority,
+        department=department,
+    )
 
     return AnalysisResult(
         category=category,
