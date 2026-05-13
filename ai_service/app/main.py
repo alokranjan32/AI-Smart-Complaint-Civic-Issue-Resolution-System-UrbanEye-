@@ -71,9 +71,18 @@ app = FastAPI(
 )
 
 
+def service_status():
+    return {"ok": True, "service": "urbaneye-ai"}
+
+
+@app.get("/")
+def root():
+    return service_status()
+
+
 @app.get("/health")
 def health_check():
-    return {"ok": True, "service": "urbaneye-ai"}
+    return service_status()
 
 
 @app.post("/analyze", response_model=AnalysisResult)
