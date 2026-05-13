@@ -23,7 +23,7 @@ function complaintCacheKey(id) {
 
 export const createComplaint = async (req, res, next) => {
   try {
-    const { title, description, location, image, latitude, longitude } = req.body;
+    const { title, description, location, image, latitude, longitude, userId } = req.body;
 
     if (!title || !description || !location) {
       return res.status(400).json({ message: "Title, description, and location are required." });
@@ -33,9 +33,11 @@ export const createComplaint = async (req, res, next) => {
 
     if (prisma && process.env.DATABASE_URL) {
       try {
-        const firstUser = await prisma.user.findFirst();
+        const selectedUser = userId
+          ? await prisma.user.findUnique({ where: { id: userId } })
+          : await prisma.user.findFirst();
 
-        if (!firstUser) {
+        if (!selectedUser) {
           return res.status(400).json({ message: "Create a user before filing a complaint." });
         }
 
@@ -52,15 +54,15 @@ export const createComplaint = async (req, res, next) => {
             suggestedAction: analysis.suggestedAction,
             socialPost: analysis.socialPost,
             image: image || "",
-            latitude: Number(latitude) || 25.5941,
-            longitude: Number(longitude) || 85.1376,
+            latitude: Number(latitude) || 28.6139,
+            longitude: Number(longitude) || 77.209,
             upvotes: 1,
-            userId: firstUser.id,
+            userId: selectedUser.id,
             history: {
               create: {
                 type: "CREATED",
-                actorName: firstUser.name,
-                actorRole: firstUser.role,
+                actorName: selectedUser.name,
+                actorRole: selectedUser.role,
                 message: "Complaint submitted and routed for AI triage.",
                 toStatus: "PENDING",
                 department: analysis.department,
@@ -88,7 +90,14 @@ export const createComplaint = async (req, res, next) => {
       }
     }
 
-    const defaultUser = getRawUsers()[0];
+    const defaultUser = userId
+      ? getRawUsers().find((user) => user.id === userId)
+      : getRawUsers()[0];
+
+    if (!defaultUser) {
+      return res.status(400).json({ message: "Create a user before filing a complaint." });
+    }
+
     const complaint = addComplaint({
       id: crypto.randomUUID(),
       title: title.trim(),
@@ -97,8 +106,8 @@ export const createComplaint = async (req, res, next) => {
       ...analysis,
       status: "PENDING",
       image: image || "",
-      latitude: Number(latitude) || 25.5941,
-      longitude: Number(longitude) || 85.1376,
+      latitude: Number(latitude) || 28.6139,
+      longitude: Number(longitude) || 77.209,
       upvotes: 1,
       assignedTo: "",
       adminNote: "",

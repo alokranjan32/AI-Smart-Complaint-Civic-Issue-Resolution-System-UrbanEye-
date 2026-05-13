@@ -27,7 +27,9 @@ export default function ReportPanel({ onCreated }: Props) {
     setMessage("");
 
     try {
-      await createComplaint(form);
+      const savedUser = window.localStorage.getItem("urbaneye-user");
+      const user = savedUser ? (JSON.parse(savedUser) as { id?: string }) : null;
+      await createComplaint({ ...form, userId: user?.id });
       setMessage("Complaint submitted and routed for triage.");
       setForm({ title: "", description: "", location: "" });
       onCreated?.();

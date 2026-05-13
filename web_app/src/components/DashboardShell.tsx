@@ -5,19 +5,41 @@ import { useEffect, useState } from "react";
 import ComplaintCard from "./Complaintcard";
 import MapComplaint from "./MapComplaint";
 import ReportPanel from "./ReportPanel";
-import { type AdminOverview, type Complaint, demoOverview } from "../lib/demoData";
+import { type AdminOverview, type Complaint } from "../lib/demoData";
 import { getAdminOverview } from "../services/adminService";
 import { getComplaints } from "../services/complaintService";
 
+const emptyOverview: AdminOverview = {
+  totals: {
+    complaints: 0,
+    pending: 0,
+    inProgress: 0,
+    resolved: 0,
+    users: 0,
+  },
+  statusBreakdown: {},
+  priorityBreakdown: {},
+  departmentBreakdown: {},
+  recentComplaints: [],
+};
+
 export default function DashboardShell() {
-  const [overview, setOverview] = useState<AdminOverview>(demoOverview);
-  const [complaints, setComplaints] = useState<Complaint[]>(demoOverview.recentComplaints);
+  const [overview, setOverview] = useState<AdminOverview>(emptyOverview);
+  const [complaints, setComplaints] = useState<Complaint[]>([]);
+  const [error, setError] = useState("");
 
   const load = () =>
-    Promise.all([getAdminOverview(), getComplaints()]).then(([nextOverview, nextComplaints]) => {
-      setOverview(nextOverview);
-      setComplaints(nextComplaints);
-    });
+    Promise.all([getAdminOverview(), getComplaints()])
+      .then(([nextOverview, nextComplaints]) => {
+        setOverview(nextOverview);
+        setComplaints(nextComplaints);
+        setError("");
+      })
+      .catch((loadError) => {
+        setOverview(emptyOverview);
+        setComplaints([]);
+        setError(loadError instanceof Error ? loadError.message : "Unable to load live complaints.");
+      });
 
   useEffect(() => {
     void load();
@@ -59,11 +81,23 @@ export default function DashboardShell() {
           </div>
         ))}
       </section>
-      <section className="section-grid">
+      <section>
         <ReportPanel onCreated={load} />
+      </section>
+      <section>
         <MapComplaint />
       </section>
+      {error ? (
+        <p className="rounded-[24px] border border-[var(--border)] bg-white/75 p-4 text-sm text-[var(--ink-muted)]">
+          {error}
+        </p>
+      ) : null}
       <section className="grid gap-5 md:grid-cols-2">
+        {complaints.length === 0 && !error ? (
+          <p className="rounded-[24px] border border-[var(--border)] bg-white/75 p-4 text-sm text-[var(--ink-muted)]">
+            No complaints have been submitted yet.
+          </p>
+        ) : null}
         {complaints.map((complaint) => (
           <ComplaintCard key={complaint.id} complaint={complaint} />
         ))}

@@ -1,17 +1,51 @@
+"use client";
+
 import Link from "next/link";
+import { useEffect, useState } from "react";
 
 import Navbar from "../components/Navbar";
 import ComplaintCard from "../components/Complaintcard";
 import Sidebar from "../components/Sidebar";
-import { demoComplaints } from "../lib/demoData";
+import { type AdminOverview, type Complaint } from "../lib/demoData";
+import { getAdminOverview } from "../services/adminService";
+import { getComplaints } from "../services/complaintService";
 
-const stats = [
-  { label: "Open complaints", value: "128" },
-  { label: "Resolved this week", value: "43" },
-  { label: "Avg response time", value: "7.2h" },
-];
+const emptyOverview: AdminOverview = {
+  totals: {
+    complaints: 0,
+    pending: 0,
+    inProgress: 0,
+    resolved: 0,
+    users: 0,
+  },
+  statusBreakdown: {},
+  priorityBreakdown: {},
+  departmentBreakdown: {},
+  recentComplaints: [],
+};
 
 export default function Home() {
+  const [overview, setOverview] = useState<AdminOverview>(emptyOverview);
+  const [complaints, setComplaints] = useState<Complaint[]>([]);
+
+  useEffect(() => {
+    void Promise.all([getAdminOverview(), getComplaints()])
+      .then(([nextOverview, nextComplaints]) => {
+        setOverview(nextOverview);
+        setComplaints(nextComplaints.slice(0, 3));
+      })
+      .catch(() => {
+        setOverview(emptyOverview);
+        setComplaints([]);
+      });
+  }, []);
+
+  const stats = [
+    { label: "Open complaints", value: overview.totals.complaints },
+    { label: "Pending", value: overview.totals.pending },
+    { label: "Resolved", value: overview.totals.resolved },
+  ];
+
   return (
     <div className="pb-14">
       <Navbar />
@@ -55,7 +89,12 @@ export default function Home() {
         </section>
 
         <section className="grid gap-5 md:grid-cols-3">
-          {demoComplaints.map((complaint) => (
+          {complaints.length === 0 ? (
+            <p className="rounded-[28px] border border-[var(--border)] bg-white/65 p-5 text-sm text-[var(--ink-muted)] md:col-span-3">
+              No live complaints are available yet.
+            </p>
+          ) : null}
+          {complaints.map((complaint) => (
             <ComplaintCard key={complaint.id} complaint={complaint} />
           ))}
         </section>

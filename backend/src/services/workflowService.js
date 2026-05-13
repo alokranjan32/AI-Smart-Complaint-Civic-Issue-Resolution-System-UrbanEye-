@@ -12,6 +12,15 @@ function normalizeHistoryEntry(entry) {
   };
 }
 
+function sanitizeUser(user) {
+  if (!user) {
+    return user;
+  }
+
+  const { password, ...safeUser } = user;
+  return safeUser;
+}
+
 export function createDefaultHistoryEntry(complaint) {
   return {
     id: `history-${complaint.id}-created`,
@@ -37,6 +46,7 @@ export function normalizeComplaintShape(complaint) {
 
   return {
     ...complaint,
+    user: sanitizeUser(complaint.user),
     category: complaint.category || "General",
     priority: complaint.priority || "MEDIUM",
     department: complaint.department || "Civic Response Cell",
@@ -45,8 +55,8 @@ export function normalizeComplaintShape(complaint) {
     suggestedAction: complaint.suggestedAction || complaint.suggested_action || "",
     socialPost: complaint.socialPost || complaint.social_post || "",
     image: complaint.image || "",
-    latitude: Number(complaint.latitude) || 25.5941,
-    longitude: Number(complaint.longitude) || 85.1376,
+    latitude: Number(complaint.latitude) || 28.6139,
+    longitude: Number(complaint.longitude) || 77.209,
     upvotes: Number(complaint.upvotes) || 0,
     assignedTo: complaint.assignedTo || "",
     adminNote: complaint.adminNote || "",

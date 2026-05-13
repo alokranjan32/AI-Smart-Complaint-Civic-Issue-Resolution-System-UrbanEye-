@@ -1,6 +1,20 @@
+"use client";
+
+import { useState } from "react";
+
 import Navbar from "../../components/Navbar";
+import { type User } from "../../lib/demoData";
 
 export default function ProfilePage() {
+  const [user] = useState<User | null>(() => {
+    if (typeof window === "undefined") {
+      return null;
+    }
+
+    const savedUser = window.localStorage.getItem("urbaneye-user");
+    return savedUser ? (JSON.parse(savedUser) as User) : null;
+  });
+
   return (
     <div className="pb-12">
       <Navbar />
@@ -10,16 +24,22 @@ export default function ProfilePage() {
             Citizen profile
           </p>
           <h1 className="mt-3 text-4xl font-semibold">Resident account snapshot</h1>
-          <div className="mt-8 grid gap-4 md:grid-cols-2">
-            <div className="rounded-[28px] border border-[var(--border)] bg-white/70 p-5">
-              <p className="text-sm text-[var(--ink-muted)]">Name</p>
-              <p className="mt-2 text-xl font-semibold">Aarav Singh</p>
+          {user ? (
+            <div className="mt-8 grid gap-4 md:grid-cols-2">
+              <div className="rounded-[28px] border border-[var(--border)] bg-white/70 p-5">
+                <p className="text-sm text-[var(--ink-muted)]">Name</p>
+                <p className="mt-2 text-xl font-semibold">{user.name}</p>
+              </div>
+              <div className="rounded-[28px] border border-[var(--border)] bg-white/70 p-5">
+                <p className="text-sm text-[var(--ink-muted)]">Email</p>
+                <p className="mt-2 text-xl font-semibold">{user.email}</p>
+              </div>
             </div>
-            <div className="rounded-[28px] border border-[var(--border)] bg-white/70 p-5">
-              <p className="text-sm text-[var(--ink-muted)]">Email</p>
-              <p className="mt-2 text-xl font-semibold">citizen@urbaneye.dev</p>
-            </div>
-          </div>
+          ) : (
+            <p className="mt-8 rounded-[28px] border border-[var(--border)] bg-white/70 p-5 text-[var(--ink-muted)]">
+              No signed-in account found. Log in or create an account to see your profile here.
+            </p>
+          )}
         </section>
       </main>
     </div>
