@@ -1,5 +1,10 @@
-const API_BASE_URL =
-  process.env.NEXT_PUBLIC_API_URL?.replace(/\/$/, "") || "http://localhost:5000/api";
+function normalizeApiBaseUrl(value?: string) {
+  const baseUrl = value?.replace(/\/$/, "") || "http://localhost:5000/api";
+
+  return baseUrl.endsWith("/api") ? baseUrl : `${baseUrl}/api`;
+}
+
+const API_BASE_URL = normalizeApiBaseUrl(process.env.NEXT_PUBLIC_API_URL);
 
 type RequestOptions = RequestInit & {
   fallbackData?: unknown;
