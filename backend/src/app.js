@@ -10,9 +10,30 @@ import userRoutes from "./routes/userRoutes.js";
 
 const app = express();
 
+const allowedOrigins = [
+  "http://localhost:3000",
+  "http://localhost:3001",
+  "http://127.0.0.1:3000",
+  "http://127.0.0.1:3001",
+  "https://ai-smart-complaint-civic-issue-reso-red.vercel.app",
+  "https://ai-smart-complaint-civic-issue-reso-nu.vercel.app",
+  ...(process.env.CORS_ORIGINS || "")
+    .split(",")
+    .map((origin) => origin.trim())
+    .filter(Boolean),
+];
+
+const vercelProjectOriginPattern = /^https:\/\/ai-smart-complaint-civic-issu.*\.vercel\.app$/;
+
 app.use(
   cors({
-    origin: true,
+    origin(origin, callback) {
+      if (!origin || allowedOrigins.includes(origin) || vercelProjectOriginPattern.test(origin)) {
+        return callback(null, true);
+      }
+
+      return callback(new Error(`Origin ${origin} is not allowed by CORS`));
+    },
     credentials: true,
   }),
 );
