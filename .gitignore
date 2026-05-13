@@ -140,6 +140,9 @@ logs/
 tmp/
 temp/
 
+# Local report / dissertation artifacts
+project_report/
+
 # -----------------------------
 
 # Coverage reports
