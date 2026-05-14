@@ -1,6 +1,7 @@
 {
   "cli": {
-    "version": ">= 14.0.0"
+    "version": ">= 14.0.0",
+    "appVersionSource": "local"
   },
   "build": {
     "preview": {
@@ -9,7 +10,7 @@
         "buildType": "apk"
       },
       "env": {
-        "EXPO_PUBLIC_API_URL": "https://YOUR_BACKEND_DOMAIN/api"
+        "EXPO_PUBLIC_API_URL": "https://ai-smart-complaint-civic-issue.onrender.com/api"
       }
     },
     "production": {
@@ -20,7 +21,7 @@
         "simulator": false
       },
       "env": {
-        "EXPO_PUBLIC_API_URL": "https://YOUR_BACKEND_DOMAIN/api"
+        "EXPO_PUBLIC_API_URL": "https://ai-smart-complaint-civic-issue.onrender.com/api"
       }
     }
   }

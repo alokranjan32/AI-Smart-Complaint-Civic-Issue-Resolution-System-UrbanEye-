@@ -18,9 +18,21 @@ function isTunnelHost(host) {
   return typeof host === "string" && host.endsWith(".exp.direct");
 }
 
+function normalizeApiUrl(url) {
+  const trimmedUrl = url?.trim().replace(/\/$/, "");
+
+  if (!trimmedUrl) {
+    return null;
+  }
+
+  return trimmedUrl.endsWith("/api") ? trimmedUrl : `${trimmedUrl}/api`;
+}
+
 function resolveBaseUrl() {
-  if (process.env.EXPO_PUBLIC_API_URL) {
-    return process.env.EXPO_PUBLIC_API_URL;
+  const configuredUrl = normalizeApiUrl(process.env.EXPO_PUBLIC_API_URL);
+
+  if (configuredUrl) {
+    return configuredUrl;
   }
 
   const devHost = resolveDevHost();

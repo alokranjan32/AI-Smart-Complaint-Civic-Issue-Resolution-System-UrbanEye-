@@ -18,29 +18,78 @@ REDIS_URL=redis://localhost:6379
 
 For online deployment, use a managed PostgreSQL database such as Neon, Supabase, Railway, or Render PostgreSQL. Use Upstash Redis if Redis is needed online.
 
-## Online Deployment Plan
+## Recommended Online Deployment Plan
 
-Deploy these parts separately:
+This repo now includes:
 
-1. Backend API
-   - Deploy `/backend` to Render, Railway, or similar Node.js hosting.
-   - Set `DATABASE_URL` to the online PostgreSQL URL.
-   - Set `REDIS_URL` to the online Redis URL if Redis is used.
-   - Public backend URL example: `https://urbaneye-api.example.com`
+- `render.yaml` for the backend API, AI service, PostgreSQL, and Redis.
+- `web_app/vercel.json` for deploying the Next.js dashboard on Vercel.
+- `.env.example` files for backend, AI service, web, and mobile runtime configuration.
 
-2. AI Service
-   - Deploy `/ai_service` to Render, Railway, or a Python-compatible host.
-   - Public AI URL example: `https://urbaneye-ai.example.com`
-   - Update backend AI service environment variables if required.
+Deploy in this order:
 
-3. Web App
-   - Deploy `/web_app` to Vercel.
-   - Set the backend API URL environment variable to the hosted backend.
-   - Public web URL example: `https://urbaneye.vercel.app`
+1. Render: backend API, AI service, PostgreSQL, Redis
+2. Vercel: web dashboard
+3. Expo EAS: mobile Android/iOS builds
 
-4. Mobile App
-   - Use Expo EAS Build.
-   - Set `EXPO_PUBLIC_API_URL` to the deployed backend API:
+## 1. Deploy Backend, AI Service, Database, and Redis on Render
+
+1. Push this repository to GitHub.
+2. In Render, create a new Blueprint from the repository.
+3. Render will read `render.yaml` and create:
+   - `urbaneye-api`
+   - `urbaneye-ai`
+   - `urbaneye-db`
+   - `urbaneye-redis`
+4. Set the required secret environment variables in Render:
+
+```text
+GROQ_API_KEY=your_groq_api_key
+CORS_ORIGINS=https://YOUR_WEB_APP_DOMAIN
+```
+
+`CORS_ORIGINS` can be updated after the Vercel URL is created. Multiple origins should be comma-separated.
+
+The backend start command runs Prisma migrations automatically:
+
+```bash
+npm run deploy:start
+```
+
+Expected health URLs after deploy:
+
+```text
+https://YOUR_BACKEND_DOMAIN/health
+https://YOUR_AI_SERVICE_DOMAIN/health
+```
+
+## 2. Deploy Web App on Vercel
+
+1. Import the GitHub repository into Vercel.
+2. Set the Vercel project root directory to:
+
+```text
+web_app
+```
+
+3. Add this environment variable:
+
+```text
+NEXT_PUBLIC_API_URL=https://YOUR_BACKEND_DOMAIN/api
+```
+
+4. Deploy.
+5. Copy the Vercel production URL and update the Render backend variable:
+
+```text
+CORS_ORIGINS=https://YOUR_WEB_APP_DOMAIN
+```
+
+## 3. Deploy Mobile App with Expo EAS
+
+Before building, replace `https://YOUR_BACKEND_DOMAIN/api` in `mobile_app/eas.json` with your deployed backend API URL.
+
+Set `EXPO_PUBLIC_API_URL` to the deployed backend API:
 
 ```text
 EXPO_PUBLIC_API_URL=https://urbaneye-api.example.com/api

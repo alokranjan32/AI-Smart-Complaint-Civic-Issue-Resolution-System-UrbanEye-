@@ -9,6 +9,8 @@
   "scripts": {
     "dev": "node --watch src/server.js",
     "start": "node src/server.js",
+    "deploy:start": "prisma migrate deploy && node src/server.js",
+    "postinstall": "prisma generate",
     "prisma:generate": "prisma generate",
     "test": "echo \"No automated tests configured yet\""
   },

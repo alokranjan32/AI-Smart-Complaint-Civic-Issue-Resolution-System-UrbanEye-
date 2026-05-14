@@ -1,5 +1,6 @@
 {
   "expo": {
+    "owner": "alokranjan32",
     "name": "UrbanEye",
     "slug": "urbaneye",
     "version": "1.0.0",
@@ -17,10 +18,11 @@
     "android": {
       "package": "com.urbaneye.app",
       "permissions": [
-        "CAMERA",
-        "ACCESS_COARSE_LOCATION",
-        "ACCESS_FINE_LOCATION",
-        "READ_MEDIA_IMAGES"
+        "android.permission.CAMERA",
+        "android.permission.ACCESS_COARSE_LOCATION",
+        "android.permission.ACCESS_FINE_LOCATION",
+        "android.permission.READ_MEDIA_IMAGES",
+        "android.permission.RECORD_AUDIO"
       ]
     },
     "plugins": [
@@ -32,6 +34,11 @@
           "cameraPermission": "Allow UrbanEye to scan and capture civic hazards."
         }
       ]
-    ]
+    ],
+    "extra": {
+      "eas": {
+        "projectId": "320b6c2e-b62b-4be6-b66c-2b2dfee355ca"
+      }
+    }
   }
 }
