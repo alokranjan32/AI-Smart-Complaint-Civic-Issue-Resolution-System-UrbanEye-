@@ -6,6 +6,7 @@ import { useEffect, useState } from "react";
 import Navbar from "../components/Navbar";
 import ComplaintCard from "../components/Complaintcard";
 import Sidebar from "../components/Sidebar";
+import { ANDROID_APK_FILENAME, ANDROID_APK_URL } from "../lib/downloads";
 import { type AdminOverview, type Complaint } from "../lib/demoData";
 import { getAdminOverview } from "../services/adminService";
 import { getComplaints } from "../services/complaintService";
@@ -69,6 +70,15 @@ export default function Home() {
               >
                 Open Dashboard
               </Link>
+              <a
+                href={ANDROID_APK_URL}
+                download={ANDROID_APK_FILENAME}
+                target="_blank"
+                rel="noreferrer"
+                className="rounded-full bg-[var(--accent)] px-6 py-3 text-sm font-semibold text-white transition hover:bg-[var(--accent-dark)]"
+              >
+                Download Android APK
+              </a>
               <Link
                 href="/register"
                 className="rounded-full border border-[var(--border)] bg-white/75 px-6 py-3 text-sm font-semibold"

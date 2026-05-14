@@ -3,6 +3,8 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
+import { ANDROID_APK_FILENAME, ANDROID_APK_URL } from "../lib/downloads";
+
 const navLinks = [
   { href: "/dashboard", label: "Dashboard" },
   { href: "/complaints", label: "Complaints" },
@@ -36,12 +38,23 @@ export default function Navbar() {
             </Link>
           ))}
         </nav>
-        <Link
-          href="/login"
-          className="rounded-full bg-[var(--foreground)] px-4 py-2 text-sm font-medium text-white shadow-[0_12px_30px_rgba(20,33,61,0.18)] transition hover:-translate-y-0.5 hover:bg-[var(--accent-dark)]"
-        >
-          Citizen Login
-        </Link>
+        <div className="flex items-center gap-2">
+          <a
+            href={ANDROID_APK_URL}
+            download={ANDROID_APK_FILENAME}
+            target="_blank"
+            rel="noreferrer"
+            className="hidden rounded-full border border-[var(--border)] bg-white/80 px-4 py-2 text-sm font-medium transition hover:-translate-y-0.5 hover:bg-white md:inline-flex"
+          >
+            Download APK
+          </a>
+          <Link
+            href="/login"
+            className="rounded-full bg-[var(--foreground)] px-4 py-2 text-sm font-medium text-white shadow-[0_12px_30px_rgba(20,33,61,0.18)] transition hover:-translate-y-0.5 hover:bg-[var(--accent-dark)]"
+          >
+            Citizen Login
+          </Link>
+        </div>
       </div>
     </header>
   );

@@ -1,4 +1,18 @@
-const AI_SERVICE_URL = process.env.AI_SERVICE_URL?.replace(/\/$/, "") || "http://localhost:8000";
+function normalizeServiceUrl(value, fallback) {
+  const trimmed = value?.trim().replace(/\/$/, "");
+
+  if (!trimmed) {
+    return fallback;
+  }
+
+  if (/^https?:\/\//i.test(trimmed)) {
+    return trimmed;
+  }
+
+  return `http://${trimmed}`;
+}
+
+const AI_SERVICE_URL = normalizeServiceUrl(process.env.AI_SERVICE_URL, "http://localhost:8000");
 
 const SOCIAL_HASHTAGS = {
   Sanitation: ["#CleanStreets", "#CivicAction"],
